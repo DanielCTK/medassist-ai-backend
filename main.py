@@ -5,7 +5,7 @@ import numpy as np
 import cv2
 from io import BytesIO
 import os
-import gdown
+
 # ==============================================================================
 # 1. CẤU HÌNH VÀ KHỞI TẠO
 # ==============================================================================
@@ -117,43 +117,33 @@ def preprocess_image_for_prediction(image_data, target_size=IMG_SIZE):
         raise ValueError(f"Preprocessing failed: {e}")
 
 # ==============================================================================
-# 4. LOAD MÔ HÌNH (TỰ ĐỘNG TẢI TỪ DRIVE)
+# 4. LOAD MÔ HÌNH
 # ==============================================================================
-# Thay thế ID này bằng ID file của bạn trên Google Drive
-MODEL_DRIVE_ID = "1KM-t7TFag-HBELEC0Ee83N9R7sKmeABU" 
-
 @app.on_event("startup")
 def load_ai_model():
     global model
     try:
-        # 1. Kiểm tra nếu file chưa tồn tại thì tải về
         if not os.path.exists(MODEL_PATH):
-            print(f"📉 Model chưa có, đang tải từ Google Drive (ID: {MODEL_DRIVE_ID})...")
-            
-            # Tạo thư mục models nếu chưa có
-            os.makedirs("models", exist_ok=True)
-            
-            # Tải file về
-            url = f'https://drive.google.com/uc?id={MODEL_DRIVE_ID}'
-            gdown.download(url, MODEL_PATH, quiet=False)
-            print("✅ Tải xong model!")
+            print(f"❌ LỖI: Không tìm thấy file mô hình tại: {MODEL_PATH}")
+            raise FileNotFoundError(f"Model file not found at: {MODEL_PATH}")
 
-        # 2. Load Model như bình thường
-        print(f"⏳ Đang khởi tạo mô hình từ {MODEL_PATH}...")
+        print(f"⏳ Đang tải mô hình từ {MODEL_PATH}...")
+       
+        # TRUYỀN custom_objects để TensorFlow nhận ra CategoricalFocalLoss
         model = tf.keras.models.load_model(
-            MODEL_PATH, 
+            MODEL_PATH,
             custom_objects={'CategoricalFocalLoss': CategoricalFocalLoss}
         )
-        
+       
         print(f"✅ Mô hình đã được tải thành công!")
-        
+       
         # Warm-up
         dummy_input = np.zeros((1, IMG_SIZE, IMG_SIZE, 3), dtype=np.float32)
         model.predict(dummy_input)
-        print("✅ Server sẵn sàng!")
-        
+        print("✅ Warm-up thành công. Server sẵn sàng!")
+       
     except Exception as e:
-        print(f"❌ LỖI NGHIÊM TRỌNG: {e}")
+        print(f"❌ Lỗi tải mô hình: {e}")
         model = None
 
 # ==============================================================================
