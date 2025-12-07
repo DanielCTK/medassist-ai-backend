@@ -1,0 +1,24 @@
+# --- Dependency Directories (RẤT QUAN TRỌNG) ---
+node_modules/
+venv/
+env/
+__pycache__/
+.DS_Store
+
+# --- Environment Variables (BẢO MẬT) ---
+.env
+.env.local
+*.env
+
+# --- Build Output ---
+dist/
+build/
+
+# --- IDE Settings ---
+.vscode/
+.idea/
+
+# --- AI Models (Nếu file > 100MB thì bỏ comment dòng dưới để chặn) ---
+# *.keras
+# *.h5
+# models/
