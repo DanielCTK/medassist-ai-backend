@@ -19,6 +19,6 @@ build/
 .idea/
 
 # --- AI Models (Nếu file > 100MB thì bỏ comment dòng dưới để chặn) ---
-# *.keras
+*.keras
 # *.h5
 # models/
