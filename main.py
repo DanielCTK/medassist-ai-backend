@@ -120,7 +120,7 @@ def preprocess_image_for_prediction(image_data, target_size=IMG_SIZE):
 # 4. LOAD MÔ HÌNH (TỰ ĐỘNG TẢI TỪ DRIVE)
 # ==============================================================================
 # Thay thế ID này bằng ID file của bạn trên Google Drive
-MODEL_DRIVE_ID = "DÁN_ID_GOOGLE_DRIVE_CỦA_BẠN_VÀO_ĐÂY" 
+MODEL_DRIVE_ID = "https://drive.google.com/file/d/1KM-t7TFag-HBELEC0Ee83N9R7sKmeABU/view?usp=drive_link" 
 
 @app.on_event("startup")
 def load_ai_model():
